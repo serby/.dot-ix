@@ -12,7 +12,7 @@ fi
 
 autoload -Uz promptinit
 promptinit
-prompt kylewest
+prompt skwp
 
 export ANDROID_HOME=/usr/local/opt/android-sdk
 ulimit -n 2048
