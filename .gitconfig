@@ -1,0 +1,53 @@
+[user]
+	name = Paul Serby
+	email = paul.serby@clock.co.uk
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	grep = auto
+
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	ci = commit
+	co = checkout
+	st = status
+	br = branch
+	pl = pull --ff-only
+	mg = merge --ff-only
+	my = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --reverse --all --since=1.month.ago --author='Paul Serby'
+
+[mergetool "diffmerge"]
+	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+	trustExitCode = false
+
+[core]
+	editor = subl -w
+	excludesfile = /Users/paul/.gitignore_global
+
+[difftool]
+	prompt = false
+
+[mergetool]
+	prompt = false
+
+[push]
+	default = current
+
+[difftool "sourcetree"]
+	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
+	path = 
+
+[mergetool "sourcetree"]
+	cmd = /usr/local/bin/ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustexitcode = true
+[merge]
+	tool = opendiff
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[diff]
+	tool = Kaleidoscope

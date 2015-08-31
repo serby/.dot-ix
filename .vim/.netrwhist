@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/paul/Development/javascript/validity/node_modules'
+let g:netrw_dirhist_2='/Users/paul/Development/javascript/validity/node_modules/schema'
+let g:netrw_dirhist_3='/Users/paul/Development/javascript/validity/node_modules/schema/test'
+let g:netrw_dirhist_4='/Users/paul/.ssh'
+let g:netrw_dirhist_5='/Users/paul/Development/javascript/refac/cf-list-aggregator'
+let g:netrw_dirhist_6='/Users/paul/Development/javascript/refac/cf-list-aggregator/test'
+let g:netrw_dirhist_7='/Users/paul/Development/javascript/refac/cf-list-aggregator'
