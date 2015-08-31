@@ -3,7 +3,7 @@ echo Installing *ix Setup
 
 for file in $(ls -a)
 do
-	if [ $file != "install.sh" ] && [ $file != "." ] && [ $file != ".." ]
+    if [ $file != ".git"] && [$file != "install.sh" ] && [ $file != "." ] && [ $file != ".." ]
 	then
 		echo Linking ~/$file
 		ln -s -f $PWD/$file ~
