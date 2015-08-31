@@ -18,6 +18,14 @@ else
 	echo zprezto already installed
 fi
 
+if [ ! -e ~/.vim_runtime ]; then
+	echo Installing Awesome Vim Setup
+	git clone https://github.com/amix/vimrc.git ~/.vim_runtime
+	sh ~/.vim_runtime/install_awesome_vimrc.sh
+else
+	echo Awesome Vim Setup already installed
+fi
+
 # Switch to ZSh
 if [ $SHELL != /bin/zsh ]; then
 	chsh -s /bin/zsh
