@@ -10,15 +10,18 @@
 #
 
 if [[ "$OSTYPE" == darwin* ]]; then
-  export BROWSER='open'
+  export browser='open'
+  export editor='subl'
+  export visual='subl'
+else
+  export EDITOR='vi'
+  export VISUAL='vi'
 fi
 
 #
 # Editors
 #
 
-export EDITOR='subl'
-export VISUAL='subl'
 export PAGER='less'
 
 #

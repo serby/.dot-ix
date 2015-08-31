@@ -23,8 +23,7 @@
 	trustExitCode = false
 
 [core]
-	editor = subl -w
-	excludesfile = /Users/paul/.gitignore_global
+	excludesfile = ~/.gitignore
 
 [difftool]
 	prompt = false
@@ -49,5 +48,3 @@
 	tool = opendiff
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[diff]
-	tool = Kaleidoscope

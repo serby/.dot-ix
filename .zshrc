@@ -10,6 +10,10 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+autoload -Uz promptinit
+promptinit
+prompt kylewest
+
 export ANDROID_HOME=/usr/local/opt/android-sdk
 ulimit -n 2048
 
