@@ -1,0 +1,57 @@
+# Based on skwp
+
+function prompt_serby_precmd {
+  # Get Git repository information.
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
+}
+
+function prompt_serby_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  # Load required functions.
+  autoload -Uz add-zsh-hook
+
+  # Add hook to set up prompt parameters before each command.
+  add-zsh-hook precmd prompt_serby_precmd
+
+  # Use extended color pallete if available.
+  if [[ $TERM = *256color* || $TERM = *rxvt* ]]; then
+    _prompt_serby_colors=(
+      "%F{61}"  # light blue
+      "%F{166}" # Orange
+      "%F{135}" # Purple
+      "%F{161}" # Hotpink
+      "%F{245}" # grey
+    )
+  else
+    _prompt_serby_colors=(
+      "%F{cyan}"
+      "%F{yellow}"
+      "%F{magenta}"
+      "%F{red}"
+      "%F{green}"
+    )
+  fi
+
+  # Set git-info parameters.
+  zstyle ':prezto:module:git:info' verbose 'yes'
+  zstyle ':prezto:module:git:info:branch' format "${_prompt_serby_colors[1]}%b%f"
+  zstyle ':prezto:module:git:info:added' format "${_prompt_serby_colors[5]}a%f"
+  zstyle ':prezto:module:git:info:deleted' format "${_prompt_serby_colors[2]}d%f"
+  zstyle ':prezto:module:git:info:modified' format "${_prompt_serby_colors[4]}m%f"
+  zstyle ':prezto:module:git:info:untracked' format "${_prompt_serby_colors[3]}u%f"
+  zstyle ':prezto:module:git:info:keys' format 'prompt' '%b %d%a%m%u '
+
+  # Define prompts.
+  if [ "$(uname -n)" = "Serbys-Air.local" ]; then
+    PROMPT="${_prompt_serby_colors[5]}%2d%f "'${git_info:+${(e)git_info[prompt]}}'""
+  else
+    PROMPT="${_prompt_serby_colors[3]}%n%f@${_prompt_serby_colors[2]}%m%f ${_prompt_serby_colors[5]}%2d%f "'${git_info:+${(e)git_info[prompt]}}'""
+  fi
+}
+
+prompt_serby_setup "$@"

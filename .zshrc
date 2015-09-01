@@ -10,10 +10,6 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-autoload -Uz promptinit
-promptinit
-prompt skwp
-
 export ANDROID_HOME=/usr/local/opt/android-sdk
 ulimit -n 2048
 
@@ -70,4 +66,8 @@ elif type compctl &>/dev/null; then
   }
   compctl -K _npm_completion npm
 fi
+
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+
+source "$HOME/.dot-ix/.zsh-prompt"
+zstyle ':prezto:module:prompt' theme 'serby'
