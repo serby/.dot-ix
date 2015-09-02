@@ -5,14 +5,10 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
-#
-# Browser
-#
-
 if [[ "$OSTYPE" == darwin* ]]; then
-  export browser='open'
-  export editor='subl'
-  export visual='subl'
+  export BROWSER='open'
+  export EDITOR='subl -w'
+  export VISUAL='subl -w'
 else
   export EDITOR='vi'
   export VISUAL='vi'
