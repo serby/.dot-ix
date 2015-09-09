@@ -70,4 +70,5 @@ fi
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
 
 source "$HOME/.dot-ix/.zsh-prompt"
-zstyle ':prezto:module:prompt' theme 'serby'
+#zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
+source ~/.fzf.zsh
