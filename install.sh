@@ -28,7 +28,7 @@ fi
 
 # Switch to ZSh
 if [ $SHELL != /bin/zsh ]; then
-	chsh -s /bin/zsh
+	sudo chsh -s /bin/zsh paul
 else
 	echo ZSH is already the default shell
 fi
