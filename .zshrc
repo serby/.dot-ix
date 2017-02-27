@@ -72,3 +72,7 @@ test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_in
 source "$HOME/.dot-ix/.zsh-prompt"
 #zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
 source ~/.fzf.zsh
+export PATH="$HOME/.basher/bin:$PATH"
+eval "$(basher init -)"
+
+export PATH="$HOME/.yarn/bin:$PATH"
