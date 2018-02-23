@@ -24,6 +24,7 @@
 
 [core]
 	excludesfile = /Users/paul/.gitignore_global
+    ignorecase = false
 
 [difftool]
 	prompt = false
@@ -38,8 +39,10 @@
 [merge]
 	tool = opendiff
 [difftool "sourcetree"]
-	cmd = /Users/paul/Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Users/paul/Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
 	trustExitCode = true
+[commit]
+	template = /Users/paul/.stCommitMsg
