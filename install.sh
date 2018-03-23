@@ -1,9 +1,21 @@
 #!/bin/bash
 echo Installing *ix Setup
 
+
+# Install some essentials
+sh install/ix.sh
+
+# Detect the platform.
+case "$OSTYPE" in
+  darwin*) # Mac (OSX)
+	sh install/darwin.sh
+	ln -s -f ~/.dot-ix/configs/code/* ~/Library/Application\ Support/Code/User/
+	;;
+esac
+
 for file in $(ls -a)
 do
-    if [ $file != ".git" ] && [ $file != "install.sh" ] && [ $file != "." ] && [ $file != ".." ]
+    if [ $file != ".git" ] && [ $file != "install*" ] && [ $file != "." ] && [ $file != ".." ]
 	then
 		echo Linking ~/$file
 		ln -s -f $PWD/$file ~
@@ -28,7 +40,7 @@ fi
 
 # Switch to ZSh
 if [ $SHELL != /bin/zsh ]; then
-	sudo chsh -s /bin/zsh paul
+	sudo chsh -s /bin/zsh `whoami`
 else
 	echo ZSH is already the default shell
 fi
