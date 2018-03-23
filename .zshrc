@@ -22,3 +22,6 @@ eval "$(basher init -)"
 unsetopt correct
 export PATH="$HOME/.yarn/bin:./node_modules/.bin:$PATH:/Users/paul/Library/Android/sdk/tools/bin:/Users/paul/Library/Android/sdk/platform-tools/"
 alias stree='open -a SourceTree'
+# tabtab source for yarn package
+# uninstall by removing these lines or running `tabtab uninstall yarn`
+[[ -f /Users/paul/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . /Users/paul/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
