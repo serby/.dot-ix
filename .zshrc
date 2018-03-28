@@ -15,13 +15,24 @@ ulimit -n 2048
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
 
+# Set the tab name based on current dir.
+function tab_title {
+  echo -n -e "\033]0;${PWD##*/}\007"
+}
+add-zsh-hook precmd tab_title
+
+# Random Tab color
+echo -e "\033]6;1;bg;red;brightness;$((128 + RANDOM % 255))\a"
+echo -e "\033]6;1;bg;green;brightness;$((128 + RANDOM % 255))\a"
+echo -e "\033]6;1;bg;blue;brightness;$((128 + RANDOM % 255))\a"
+
 source "$HOME/.dot-ix/.zsh-prompt"
 #zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
-export PATH="$HOME/.basher/bin:$PATH"
+export PATH="/usr/local/heroku/bin:$HOME/.basher/bin:$PATH:$HOME/.yarn/bin:./node_modules/.bin:$PATH:/Users/serby/Library/Android/sdk/tools/bin:/Users/serby/Library/Android/sdk/platform-tools/"
 eval "$(basher init -)"
+
 unsetopt correct
-export PATH="$HOME/.yarn/bin:./node_modules/.bin:$PATH:/Users/paul/Library/Android/sdk/tools/bin:/Users/paul/Library/Android/sdk/platform-tools/"
 alias stree='open -a SourceTree'
 # tabtab source for yarn package
 # uninstall by removing these lines or running `tabtab uninstall yarn`
-[[ -f /Users/paul/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . /Users/paul/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
+[[ -f /Users/serby/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . /Users/serby/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
