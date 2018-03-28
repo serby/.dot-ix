@@ -17,25 +17,22 @@
 	pl = pull --ff-only
 	mg = merge --ff-only
 	my = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --reverse --all --since=1.month.ago --author='Paul Serby'
-
-[mergetool "diffmerge"]
-	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
-	trustExitCode = false
+	prompt = true
 
 [core]
-	excludesfile = /Users/serby/.gitignore_global
     ignorecase = false
-
-[difftool]
-	prompt = false
-
-[mergetool]
-	prompt = false
 
 [push]
 	default = current
 	followTags = true
 
+[mergetool "diffmerge"]
+	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+	trustExitCode = false
+[difftool]
+	prompt = true
+
+[mergetool]
 [merge]
 	tool = opendiff
 [difftool "sourcetree"]
@@ -44,5 +41,3 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-[commit]
-	template = /Users/paul/.stCommitMsg
