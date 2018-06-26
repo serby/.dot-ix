@@ -17,5 +17,9 @@
     "cSpell.language": ",en-GB",
     "explorer.confirmDelete": false,
     "workbench.startupEditor": "newUntitledFile",
-    "files.autoSave": "off"
+    "files.autoSave": "off",
+    "cSpell.userWords": [
+        "feed",
+        "insta"
+    ]
 }
