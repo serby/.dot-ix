@@ -32,10 +32,9 @@ DBCollection.prototype.search = function(terms) {
   return this.find({ $text: { $search: terms } })
 }
 
-function countDistinct(collectionName, propertyName) {
-  return db[collectionName].aggregate([
-    { $group: { _id: '$' + propertyName } },
-    { $group: { _id: 1, count: { $sum: 1 } } }
+DBCollection.prototype.countDistinct = function(propertyName) {
+  return this.aggregate([
+    { $group: { _id: '$' + propertyName, count: { $sum: 1 } } }
   ])
 }
 
@@ -66,7 +65,6 @@ function printArray(list) {
 }
 
 var clock = {
-  countDistinct: countDistinct,
   sortObject: sortObject,
   printArray: printArray,
   toCsv: toCsv
