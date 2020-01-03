@@ -64,6 +64,10 @@ function printArray(list) {
   })
 }
 
+ObjectId.prototype.toDate = function() {
+  return new Date(parseInt(this.valueOf().substring(0, 8), 16) * 1000)
+}
+
 var clock = {
   sortObject: sortObject,
   printArray: printArray,

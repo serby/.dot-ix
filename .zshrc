@@ -39,6 +39,8 @@ eval "$(basher init -)"
 unsetopt correct
 alias stree='open -a SourceTree'
 alias weather='curl wttr.in'
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+
 # tabtab source for yarn package
 # uninstall by removing these lines or running `tabtab uninstall yarn`
 [[ -f /Users/serby/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh ]] && . /Users/serby/.config/yarn/global/node_modules/tabtab/.completions/yarn.zsh
