@@ -1,6 +1,6 @@
 [user]
 	name = Paul Serby
-	email = paul.serby@clock.co.uk
+	email = paul@serby.net
 
 [color]
 	diff = auto
@@ -43,4 +43,4 @@
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [commit]
-	template = /Users/serby/.stCommitMsg
+	template = ~/.stCommitMsg

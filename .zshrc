@@ -33,11 +33,9 @@ echo -e "\033]6;1;bg;blue;brightness;$((128 + RANDOM % 255))\a"
 source "$HOME/.dot-ix/.zsh-prompt"
 #zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
 export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
-export PATH="$PATH:$JAVA_HOME/bin:$ANDROID_PATH:/usr/local/heroku/bin:$HOME/.basher/bin:$HOME/.yarn/bin:./node_modules/.bin:/usr/local/opt/mongodb@3.6/bin"
-eval "$(basher init -)"
+
 
 unsetopt correct
-alias stree='open -a SourceTree'
 alias weather='curl wttr.in'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
 
@@ -46,3 +44,7 @@ unalias gm
 imageinfo () {
   gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" $1
 }
+
+export PATH="$PATH:$JAVA_HOME/bin:$ANDROID_PATH::$HOME/.basher/bin:$HOME/.yarn/bin:./node_modules/.bin"
+
+export PATH=$HOME/.toolbox/bin:$PATH
