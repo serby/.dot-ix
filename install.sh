@@ -1,7 +1,6 @@
 #!/bin/bash
 echo Installing *ix Setup
 
-
 # Install some essentials
 sh install/ix.sh
 
@@ -9,17 +8,14 @@ sh install/ix.sh
 case "$OSTYPE" in
   darwin*) # Mac (OSX)
 	sh install/darwin.sh
-	ln -s -f ~/.dot-ix/configs/code/* ~/Library/Application\ Support/Code/User/
 	;;
 esac
 
-for file in $(ls -a)
+# Link finds in $HOME
+for file in $(ls -a | grep -E '^\.[A-z0-9]' | grep -v '.git')
 do
-    if [ $file != ".git" ] && [ $file != "install*" ] && [ $file != "." ] && [ $file != ".." ]
-	then
-		echo Linking ~/$file
-		ln -s -f $PWD/$file ~
-	fi
+	echo Linking ~/$file
+	ln -s -f $PWD/$file ~
 done
 
 # Install Prezto

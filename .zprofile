@@ -13,7 +13,7 @@ fi
 # Editors
 #
 
-export EDITOR='code'
+export EDITOR='code-wait'
 export VISUAL='code'
 export PAGER='less'
 

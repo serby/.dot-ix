@@ -1,12 +1,15 @@
+echo "Show the battery percentage"
+defaults write com.apple.menuextra.battery ShowPercent YES
+
 echo "Super Fast Keyboard Repeat Rate"
 defaults write -g InitialKeyRepeat -int 12 # normal minimum is 15 (225 ms)
-defaults write -g KeyRepeat -int 0.5 # normal minimum is 2 (30 ms)
+defaults write -g KeyRepeat -int 5 # normal minimum is 2 (30 ms)
 
 echo "Enable full keyboard access for all controls (e.g. enable Tab in modal dialogs)"
 defaults write -g AppleKeyboardUIMode -int 3
 
 echo "Speed up trackpad"
-defaults write -g com.apple.trackpad.scaling -int 4
+defaults write -g com.apple.trackpad.scaling -int 5
 
 echo "Enable taping"
 defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
@@ -32,8 +35,24 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 echo "Show the ~/Library folder"
 chflags nohidden ~/Library
 
+echo "Get rid of dock"
+defaults write com.apple.dock autohide-delay -float 1000; killall Dock
+
 echo "Kill affected applications"
 for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 2>&1; done
 
-echo "Get rid of dock"
-defaults write com.apple.dock autohide-delay -float 1000; killall Dock
+echo Installing brew
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Development
+brew install awscli yarn youtube-dl telnet  jq
+brew install --cask vscodium
+code --install-extension shan.code-settings-sync
+
+# Graphics
+brew install telnet ffmpeg gifsicle graphicsmagick
+
+# Database
+brew tap mongodb/brew
+brew install mongodb-community

@@ -1,2 +1,5 @@
-git clone https://github.com/basherpm/basher.git ~/.basher
-~/.basher/bin/basher install isaacs/nave
+echo Installing NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+
+echo Install nodejs
+nvm install --lts

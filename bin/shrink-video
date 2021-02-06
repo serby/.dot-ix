@@ -1,0 +1,5 @@
+#!/bin/sh
+
+INPUT=$1
+
+ffmpeg -i $INPUT -c:v libx264 -b:v 1.5M -c:a aac -b:a 128k -filter:v scale=960x540 small-$INPUT

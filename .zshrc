@@ -4,7 +4,7 @@
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
-
+echo $(date)
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -32,19 +32,19 @@ echo -e "\033]6;1;bg;blue;brightness;$((128 + RANDOM % 255))\a"
 
 source "$HOME/.dot-ix/.zsh-prompt"
 #zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+#export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 
 unsetopt correct
 alias weather='curl wttr.in'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
-
+alias crossword='curl -s https://crosswords-static.guim.co.uk/gdn.quick.`date "+%Y%m%d"`.pdf | lpr'
 unalias gm
 
 imageinfo () {
   gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" $1
 }
 
-export PATH="$PATH:$JAVA_HOME/bin:$ANDROID_PATH::$HOME/.basher/bin:$HOME/.yarn/bin:./node_modules/.bin"
-
+export PATH=$PATH:$HOME/.dot-ix/bin:$HOME/.yarn/bin:./node_modules/.bin
 export PATH=$HOME/.toolbox/bin:$PATH
+echo $(date)
