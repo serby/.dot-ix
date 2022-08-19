@@ -4,7 +4,6 @@
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
-echo $(date)
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -34,12 +33,18 @@ source "$HOME/.dot-ix/.zsh-prompt"
 #zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
 #export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
-
 unsetopt correct
 alias weather='curl wttr.in'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
 alias crossword='curl -s https://crosswords-static.guim.co.uk/gdn.quick.`date "+%Y%m%d"`.pdf | lpr'
 unalias gm
+alias notes='code ~/Notes/notes'
+
+# Work
+alias bb=brazil-build
+alias js='cd ~/Development/JavaScript && ls'
+alias ops='cd ~/workplace/PVLRCOperationsView/src/PVLRCOperationsView && ls'
+alias lrc='cd ~/workplace/AVLivingRoom/src/AVLivingRoomClient && ls'
 
 imageinfo () {
   gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" $1
@@ -47,4 +52,4 @@ imageinfo () {
 
 export PATH=$PATH:$HOME/.dot-ix/bin:$HOME/.yarn/bin:./node_modules/.bin
 export PATH=$HOME/.toolbox/bin:$PATH
-echo $(date)
+export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"

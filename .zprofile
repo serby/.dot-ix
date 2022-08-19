@@ -14,7 +14,7 @@ fi
 #
 
 export EDITOR='code-wait'
-export VISUAL='code'
+export VISUAL='code-wait'
 export PAGER='less'
 
 #
@@ -69,3 +69,5 @@ if [[ ! -d "$TMPDIR" ]]; then
 fi
 
 TMPPREFIX="${TMPDIR%/}/zsh"
+export JAVA_TOOLS_OPTIONS="-DLog4j2.formatMsgNoLookups=true"
+export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"

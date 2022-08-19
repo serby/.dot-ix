@@ -1,6 +1,6 @@
 [user]
 	name = Paul Serby
-	email = paul@serby.net
+	email = serbypau@amazon.com
 
 [color]
 	diff = auto
@@ -21,26 +21,27 @@
 
 [core]
     ignorecase = false
-	excludesfile = /Users/serby/.gitignore_global
+	excludesfile = ~/.gitignore_global
 
 [push]
 	default = current
 	followTags = true
 
-[mergetool "diffmerge"]
-	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
-	trustExitCode = false
+[diff]
+  tool = meld
 [difftool]
-	prompt = true
-
-[mergetool]
+  prompt = false
+[difftool "meld"]
+  trustExitCode = true
+  cmd = open -W -a Meld --args \"$LOCAL\" \"$REMOTE\"
 [merge]
-	tool = opendiff
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[commit]
-	template = ~/.stCommitMsg
+  tool = meld
+[mergetool]
+  prompt = false
+[mergetool "meld"]
+  trustExitCode = true
+  cmd = open -W -a Meld --args --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output=\"$MERGED\"
+
+[credential]
+	helper = !aws codecommit credential-helper $@
+	UseHttpPath = true
