@@ -30,8 +30,6 @@ echo -e "\033]6;1;bg;green;brightness;$((128 + RANDOM % 255))\a"
 echo -e "\033]6;1;bg;blue;brightness;$((128 + RANDOM % 255))\a"
 
 source "$HOME/.dot-ix/.zsh-prompt"
-#zstyle ':prezto:module:prompt' theme 'serby'[ -f ~/.fzf.zsh ]
-#export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 unsetopt correct
 alias weather='curl wttr.in'
@@ -52,4 +50,11 @@ imageinfo () {
 
 export PATH=$PATH:$HOME/.dot-ix/bin:$HOME/.yarn/bin:./node_modules/.bin
 export PATH=$HOME/.toolbox/bin:$PATH
+
+# Amazon Java Setup
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
