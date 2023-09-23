@@ -31,22 +31,24 @@ echo -e "\033]6;1;bg;blue;brightness;$((128 + RANDOM % 255))\a"
 
 source "$HOME/.dot-ix/.zsh-prompt"
 
+imageinfo () {
+  gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" $1
+}
+
 unsetopt correct
 alias weather='curl wttr.in'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
 alias crossword='curl -s https://crosswords-static.guim.co.uk/gdn.quick.`date "+%Y%m%d"`.pdf | lpr'
 unalias gm
 alias notes='code ~/Notes/notes'
+alias refreshcookie='watch -n 3000  node ~/Development/JavaScript/RefreshPostureCookie/index.mjs'
 
 # Work
 alias bb=brazil-build
 alias js='cd ~/Development/JavaScript && ls'
-alias ops='cd ~/workplace/PVLRCOperationsView/src/PVLRCOperationsView && ls'
-alias lrc='cd ~/workplace/AVLivingRoom/src/AVLivingRoomClient && ls'
+alias ops='cd ~/workplace/PVLRCOperations/src/PVLRCOperationsView && ls'
+alias lrc='cd ~/workplace/avlrc-dev/src/AVLivingRoomClient && ls'
 
-imageinfo () {
-  gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" $1
-}
 
 export PATH=$PATH:$HOME/.dot-ix/bin:$HOME/.yarn/bin:./node_modules/.bin
 export PATH=$HOME/.toolbox/bin:$PATH
