@@ -23,7 +23,12 @@ if [ ! -e ~/.zprezto ]; then
 	echo Installing zprezto
 	git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
 else
-	echo zprezto already installed
+	echo zprezto already installed, updating.
+	cd $ZPREZTODIR
+	git pull
+	git submodule sync --recursive
+	git submodule update --init --recursive
+	cd -
 fi
 
 if [ ! -e ~/.vim_runtime ]; then

@@ -45,14 +45,19 @@ echo Installing brew
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+brew analytics off
+
+# System
+brew install htop tmux tldr
+
 # Development
-brew install awscli yarn youtube-dl telnet  jq
-brew install --cask vscodium
-code --install-extension shan.code-settings-sync
+brew install git awscli yarn telnet jq sqlite
+
+#brew install --cask vscodium
 
 # Graphics
-brew install telnet ffmpeg gifsicle graphicsmagick
+brew install ffmpeg gifsicle graphicsmagick youtube-dl
 
 # Database
-brew tap mongodb/brew
-brew install mongodb-community
+#brew tap mongodb/brew
+#brew install mongodb-community

@@ -49,9 +49,12 @@ alias js='cd ~/Development/JavaScript && ls'
 alias ops='cd ~/workplace/PVLRCOperations/src/PVLRCOperationsView && ls'
 alias lrc='cd ~/workplace/avlrc-dev/src/AVLivingRoomClient && ls'
 
-
-export PATH=$PATH:$HOME/.dot-ix/bin:$HOME/.yarn/bin:./node_modules/.bin
-export PATH=$HOME/.toolbox/bin:$PATH
+export PATH=$PATH:/usr/local/opt/curl/bin
+export PATH=$PATH:./node_modules/.bin
+export PATH=$PATH:$HOME/.dot-ix/bin
+export PATH=$PATH:$HOME/.yarn/bin
+export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.toolbox/bin
 
 # Amazon Java Setup
 export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
@@ -60,3 +63,12 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Content
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# bun completions
+[ -s "/Users/serbypau/.bun/_bun" ] && source "/Users/serbypau/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+eval "$(rbenv init -)"
