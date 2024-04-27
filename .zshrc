@@ -53,7 +53,7 @@ export PATH=$PATH:/usr/local/opt/curl/bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOME/.dot-ix/bin
 export PATH=$PATH:$HOME/.yarn/bin
-export PATH=$PATH:$HOME/.cargo/bin
+[[ -d "$HOME/.cargo/bin" ]] && export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.toolbox/bin
 
 # Amazon Java Setup
@@ -66,9 +66,8 @@ export NVM_DIR="$HOME/.nvm"
 
 
 # bun completions
-[ -s "/Users/serbypau/.bun/_bun" ] && source "/Users/serbypau/.bun/_bun"
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-eval "$(rbenv init -)"

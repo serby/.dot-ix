@@ -12,7 +12,7 @@ case "$OSTYPE" in
 esac
 
 # Link finds in $HOME
-for file in $(ls -a | grep -E '^\.[A-z0-9]' | grep -v '.git')
+for file in $(ls -a | grep -E '^\.[A-z0-9]' | grep -v '\.git$')
 do
 	echo Linking ~/$file
 	ln -s -f $PWD/$file ~

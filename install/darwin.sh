@@ -1,5 +1,5 @@
 echo "Show the battery percentage"
-defaults write com.apple.menuextra.battery ShowPercent YES
+    defaults write com.apple.menuextra.battery ShowPercent YES
 
 echo "Super Fast Keyboard Repeat Rate"
 defaults write -g InitialKeyRepeat -int 12 # normal minimum is 15 (225 ms)
@@ -44,6 +44,9 @@ for app in Safari Finder Dock Mail SystemUIServer; do killall "$app" >/dev/null 
 echo Installing brew
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Ensure brew is in the path before next part
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 brew analytics off
 
