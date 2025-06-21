@@ -1,0 +1,17 @@
+#!/bin/sh
+PROJECT=$1
+SCHEME=$2
+TESTPLAN=$3
+
+xcodebuild \
+  -project $PROJECT \
+  -scheme $SCHEME \
+  -configuration Debug \
+  -testPlan $TESTPLAN \
+  -disableAutomaticPackageResolution \
+  -sdk iphonesimulator \
+  -destination "platform=iOS Simulator,name=iPhone 16,OS=18.1" \
+  -enableCodeCoverage NO \
+  -maximum-parallel-testing-workers 8 \
+  test | xcpretty
+

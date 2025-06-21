@@ -1,3 +1,5 @@
+# Amazon Q pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 #
 # Executes commands at the start of an interactive session.
 #
@@ -46,12 +48,12 @@ alias refreshcookie='watch -n 3000  node ~/Development/JavaScript/RefreshPosture
 # Work
 alias bb=brazil-build
 alias js='cd ~/Development/JavaScript && ls'
-alias ops='cd ~/workplace/PVLRCOperations/src/PVLRCOperationsView && ls'
-alias lrc='cd ~/workplace/avlrc-dev/src/AVLivingRoomClient && ls'
+alias ops='cd ~/Development/workplace/PVLRCOperations/src/PVLRCOperationsView && ls'
 
 export PATH=$PATH:/usr/local/opt/curl/bin
 export PATH=$PATH:./node_modules/.bin
 export PATH=$PATH:$HOME/.dot-ix/bin
+export PATH=$PATH:$HOME/Notes/notes/scripts
 export PATH=$PATH:$HOME/.yarn/bin
 [[ -d "$HOME/.cargo/bin" ]] && export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.toolbox/bin
@@ -71,3 +73,12 @@ export NVM_DIR="$HOME/.nvm"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+eval "$(rbenv init -)"
+eval "$(/Users/serbypau/.local/bin/mise activate zsh)"
+source ~/.local/share/mise/completions.zsh
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)" code --locate-shell-integration-path zsh
+
+# Amazon Q post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"

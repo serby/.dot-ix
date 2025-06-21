@@ -1,5 +1,15 @@
 #!/bin/sh
 
-INPUT=$1
 
-ffmpeg -i $INPUT -c:v libx264 -b:v 1.5M -c:a aac -b:a 128k -filter:v scale=960x540 small-$INPUT
+for INPUT in "$@"
+do
+  echo "Processing $INPUT"
+  BASENAME=$(basename "$INPUT")
+  DIRNAME=$(dirname "$INPUT")
+
+  ffmpeg -i "$INPUT" \
+    -c:v libx264 -b:v 1.5M \
+    -pix_fmt yuv420p -colorspace bt709 -color_range tv \
+    -c:a aac -b:a 128k \
+    "${DIRNAME}/small-${BASENAME}"
+done
