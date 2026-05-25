@@ -28,7 +28,7 @@
 	followTags = true
 
 [diff]
-  tool = meld
+	tool = opendiff
 [difftool]
   prompt = false
 [difftool "meld"]
@@ -49,3 +49,8 @@
 	defaultBranch = main
 [http]
 	postBuffer = 524288000
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

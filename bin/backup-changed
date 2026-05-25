@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+git rev-parse --is-inside-work-tree &>/dev/null || { echo "Not a git repo"; exit 1; }
+
+repo=$(basename "$(git rev-parse --show-toplevel)")
+dest="$HOME/Documents/Stashes/$repo/$(date +%Y-%m-%d)"
+files=$(git diff --name-only HEAD 2>/dev/null; git ls-files --others --exclude-standard)
+
+[ -z "$files" ] && { echo "No changed files"; exit 0; }
+
+mkdir -p "$dest"
+echo "$files" | sort -u | while read -r f; do
+  [ -f "$f" ] || continue
+  mkdir -p "$dest/$(dirname "$f")"
+  cp "$f" "$dest/$f"
+  echo "  $f"
+done
+
+echo "Backed up to $dest"

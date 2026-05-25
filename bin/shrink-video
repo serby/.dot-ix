@@ -1,15 +1,152 @@
 #!/bin/sh
 
+SHOW_ELAPSED=false
+FILES=""
 
-for INPUT in "$@"
-do
-  echo "Processing $INPUT"
-  BASENAME=$(basename "$INPUT")
-  DIRNAME=$(dirname "$INPUT")
+# Process command line arguments
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --show-elapsed)
+      SHOW_ELAPSED=true
+      shift
+      ;;
+    *)
+      # Add file to the list
+      FILES="$FILES \"$1\""
+      shift
+      ;;
+  esac
+done
 
-  ffmpeg -i "$INPUT" \
-    -c:v libx264 -b:v 1.5M \
-    -pix_fmt yuv420p -colorspace bt709 -color_range tv \
-    -c:a aac -b:a 128k \
-    "${DIRNAME}/small-${BASENAME}"
+# If no files were specified, show usage
+if [ -z "$FILES" ]; then
+  echo "Usage: shrink-video [--show-elapsed] file1 [file2 ...]"
+  echo "  --show-elapsed    Add elapsed time counter to top middle of video"
+  exit 1
+fi
+
+# Process each file
+eval "set -- $FILES"
+for f in "$@"; do
+  # Check if file exists
+  if [ ! -f "$f" ]; then
+    echo "Error: File not found: $f"
+    continue
+  fi
+  
+  # Get video duration
+  DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$f")
+  if [ -z "$DURATION" ] || [ "$DURATION" = "N/A" ]; then
+    DURATION="unknown"
+    echo "Shrinking $f (duration: unknown)..."
+  else
+    echo "Shrinking $f (duration: ${DURATION}s)..."
+  fi
+  
+  BASENAME=$(basename "$f")
+  DIRNAME=$(dirname "$f")
+
+  # Create output filename
+  OUTPUT_FILE="${DIRNAME}/small-${BASENAME}"
+  
+  # Initialize progress variables
+  PERCENT=0
+  BAR_WIDTH=50
+  LAST_PERCENT=0
+  
+  # Display initial progress bar
+  BAR=$(printf "%0.s." $(seq 1 $BAR_WIDTH))
+  printf "\r\033[K[%-${BAR_WIDTH}s] %5.1f%%" "$BAR" $PERCENT
+  
+  # Create a temporary file for progress output
+  PROGRESS_FILE=$(mktemp)
+  
+  # Run ffmpeg in background and capture progress
+  if [ "$SHOW_ELAPSED" = true ]; then
+    # With timer
+    /opt/homebrew/bin/ffmpeg -y -i "$f" \
+      -c:v libx264 -preset medium -crf 23 \
+      -profile:v high -level 4.1 -pix_fmt yuv420p \
+      -movflags +faststart \
+      -c:a aac -b:a 128k \
+      -filter_complex "scale='if(lte(iw*3/4,720),720,iw*3/4)':-2,drawtext=fontcolor=yellow:box=1:boxcolor=black@0.5:boxborderw=5:fontsize=48:x=(w-text_w)/2:y=50:text='%{pts\:hms\:2}'" \
+      -progress "$PROGRESS_FILE" -nostats \
+      "$OUTPUT_FILE" 2>/dev/null &
+  else
+    # Without timer
+    /opt/homebrew/bin/ffmpeg -y -i "$f" \
+      -c:v libx264 -preset medium -crf 23 \
+      -profile:v high -level 4.1 -pix_fmt yuv420p \
+      -movflags +faststart \
+      -c:a aac -b:a 128k \
+      -filter:v "scale='if(lte(iw*3/4,720),720,iw*3/4)':-2" \
+      -progress "$PROGRESS_FILE" -nostats \
+      "$OUTPUT_FILE" 2>/dev/null &
+  fi
+  
+  FFMPEG_PID=$!
+  
+  # Monitor progress
+  while kill -0 $FFMPEG_PID 2>/dev/null; do
+    if [ -f "$PROGRESS_FILE" ]; then
+      # Extract current time from progress file
+      OUT_TIME=$(grep "out_time=" "$PROGRESS_FILE" | tail -n1 | cut -d= -f2)
+      if [ -n "$OUT_TIME" ]; then
+        # Convert time to seconds
+        SECONDS_FLOAT=$(echo "$OUT_TIME" | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
+        
+        # Calculate percentage if duration is known
+        if [ "$DURATION" != "unknown" ]; then
+          PERCENT=$(echo "scale=1; 100 * $SECONDS_FLOAT / $DURATION" | bc -l)
+          
+          # Ensure percentage doesn't exceed 100%
+          if (( $(echo "$PERCENT > 100" | bc -l) )); then
+            PERCENT=100
+          fi
+          
+          # Only update if percentage has changed significantly
+          if (( $(echo "$PERCENT - $LAST_PERCENT >= 1" | bc -l) )); then
+            LAST_PERCENT=$PERCENT
+            FILLED=$(echo "$PERCENT * $BAR_WIDTH / 100" | bc | awk '{printf "%d", $0}')
+            EMPTY=$((BAR_WIDTH - FILLED))
+            
+            BAR=$(printf "%0.s#" $(seq 1 $FILLED))
+            BAR="${BAR}$(printf "%0.s." $(seq 1 $EMPTY))"
+            
+            printf "\r\033[K[%-${BAR_WIDTH}s] %5.1f%%" "$BAR" "$PERCENT"
+          fi
+        else
+          # If duration is unknown, just show elapsed time
+          printf "\r\033[K[Processing] Elapsed: %s" "$OUT_TIME"
+        fi
+      fi
+    fi
+    sleep 0.1
+  done
+  
+  # Wait for ffmpeg to finish
+  wait $FFMPEG_PID
+  EXIT_CODE=$?
+  
+  # Show 100% progress when done
+  if [ "$DURATION" != "unknown" ]; then
+    FILLED=$BAR_WIDTH
+    EMPTY=0
+    BAR=$(printf "%0.s#" $(seq 1 $FILLED))
+    printf "\r\033[K[%-${BAR_WIDTH}s] %5.1f%%" "$BAR" 100.0
+  else
+    printf "\r\033[K[Completed]                                        "
+  fi
+  
+  echo ""
+  
+  # Clean up progress file
+  rm -f "$PROGRESS_FILE"
+  
+  # Check if ffmpeg was successful
+  if [ $EXIT_CODE -eq 0 ]; then
+    echo "Complete: $(cd "${DIRNAME}" && pwd)/small-${BASENAME}"
+  else
+    echo "Error: Encoding failed with exit code $EXIT_CODE"
+  fi
 done
