@@ -1,7 +1,11 @@
 # Based on skwp
 
 # Midway cookie expiry, refreshed at most once per minute.
-# Sets _prompt_serby_midway to "MW-Exp HH:MM" (or empty if expired/missing).
+# Sets _prompt_serby_midway to a fully-decorated prompt fragment ("%B%F{226}MW-Exp
+# HH:MM%f%b ") or empty when the cookie is absent/expired. The decoration is baked
+# in here rather than wrapped via ${VAR:+...} in PROMPT — under PROMPT_SUBST, the
+# literal `}` after `%F{226}` would close the parameter alternate early and the
+# rest of the chip (including the value itself) would be dropped.
 function prompt_serby_midway_refresh {
   local cookie="$HOME/.midway/cookie"
   [[ -r "$cookie" ]] || { _prompt_serby_midway=""; return }
@@ -13,7 +17,7 @@ function prompt_serby_midway_refresh {
   if [[ -z "$exp" || "$exp" -le "$now" ]]; then
     _prompt_serby_midway=""
   else
-    _prompt_serby_midway="MW-Exp $(date -r "$exp" +%H:%M)"
+    _prompt_serby_midway="%B%F{226}MW-Exp $(date -r "$exp" +%H:%M)%f%b "
   fi
 }
 
@@ -66,10 +70,12 @@ function prompt_serby_setup {
 
   # Define prompts. The MW-Exp chip and git_info are kept single-quoted so they re-expand
   # on every prompt render (PROMPT has prompt_subst enabled via prompt_opts).
+  # _prompt_serby_midway already carries its own colour/bold decoration and trailing space
+  # when populated, so PROMPT can reference it directly without ${VAR:+...} braces.
   if [ "$(uname -s)" = "Darwin" ]; then
-    PROMPT="${_prompt_serby_colors[5]}%2d%f "'${_prompt_serby_midway:+%B%F{226}${_prompt_serby_midway}%f%b }${git_info:+${(e)git_info[prompt]}}'
+    PROMPT="${_prompt_serby_colors[5]}%2d%f "'${_prompt_serby_midway}${git_info:+${(e)git_info[prompt]}}'
   else
-    PROMPT="${_prompt_serby_colors[3]}%n%f@${_prompt_serby_colors[2]}%m%f ${_prompt_serby_colors[5]}%2d%f "'${_prompt_serby_midway:+%B%F{226}${_prompt_serby_midway}%f%b }${git_info:+${(e)git_info[prompt]}}'
+    PROMPT="${_prompt_serby_colors[3]}%n%f@${_prompt_serby_colors[2]}%m%f ${_prompt_serby_colors[5]}%2d%f "'${_prompt_serby_midway}${git_info:+${(e)git_info[prompt]}}'
   fi
 }
 
