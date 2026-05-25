@@ -1,84 +1,76 @@
-# Amazon Q pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 #
-# Executes commands at the start of an interactive session.
+# ~/.zshrc  --  loaded ONLY for interactive shells.
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
+# Aliases, prompt, completions, key bindings, and shell-integration hooks live here.
+# PATH and tool versions live in ~/.zshenv (so MCP servers, IDE subshells, and scripts inherit them).
 #
+
+(( ${+functions[_zsh_profile_mark]} )) && _zsh_profile_mark zshrc:start
+
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-export ANDROID_SDK=$HOME/Library/Android/sdk
-export ANDROID_PATH=$ANDROID_SDK/platform-tools:$ANDROID_SDK/tools:$ANDROID_SDK/build-tools
+# Higher fd limit; matters for parallel build/test runs.
 ulimit -n 2048
 
-test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+# Custom prompt.
+source "$HOME/.dot-ix/.zsh-prompt"
 
-# Set the tab name based on current dir.
-function tab_title {
-  echo -n -e "\033]0;${PWD##*/}\007"
-}
+#
+# Tool integrations that hook the interactive prompt.
+#
 
-# Load required functions.
+# mise: prompt hook for tool-version switching. The shim dir is already on PATH
+# from .zshenv, so non-interactive shells still resolve tools via mise --
+# this only adds the auto-switch UX.
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+
+# rbenv: prompt hook + completions.
+(( $+commands[rbenv] )) && eval "$(rbenv init -)"
+
+# bun completions.
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
+
+# iTerm2 shell integration (marks, command status, triggers).
+[[ -f "$HOME/.iterm2_shell_integration.zsh" ]] && source "$HOME/.iterm2_shell_integration.zsh"
+
+# VS Code integrated-terminal shell integration.
+if [[ "$TERM_PROGRAM" == "vscode" ]] && (( $+commands[code] )); then
+  source "$(code --locate-shell-integration-path zsh)"
+fi
+
+#
+# Behaviour tweaks.
+#
+unsetopt correct  # zsh's autocorrect is more annoying than helpful at the prompt.
+
+#
+# Tab title: name the iTerm tab after the current dir.
+#
+function tab_title { print -Pn "\e]0;%~\a" }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd tab_title
 
-# Random Tab color
-echo -e "\033]6;1;bg;red;brightness;$((128 + RANDOM % 255))\a"
-echo -e "\033]6;1;bg;green;brightness;$((128 + RANDOM % 255))\a"
-echo -e "\033]6;1;bg;blue;brightness;$((128 + RANDOM % 255))\a"
+# Random-ish iTerm tab badge colour for visual disambiguation across tabs.
+print -n "\e]6;1;bg;red;brightness;$((128 + RANDOM % 127))\a"
+print -n "\e]6;1;bg;green;brightness;$((128 + RANDOM % 127))\a"
+print -n "\e]6;1;bg;blue;brightness;$((128 + RANDOM % 127))\a"
 
-source "$HOME/.dot-ix/.zsh-prompt"
+#
+# Aliases.
+#
+alias weather='curl wttr.in'
+alias notes='code ~/Notes/notes'
 
-imageinfo () {
-  gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" $1
+#
+# Functions.
+#
+
+# Show image dimensions / bit depth in one line.
+imageinfo() {
+  gm identify -format "%wx%h %b unique_colors:%k bit_depth:%q - %i\n" "$1"
 }
 
-unsetopt correct
-alias weather='curl wttr.in'
-alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
-alias crossword='curl -s https://crosswords-static.guim.co.uk/gdn.quick.`date "+%Y%m%d"`.pdf | lpr'
-unalias gm
-alias notes='code ~/Notes/notes'
-alias refreshcookie='watch -n 3000  node ~/Development/JavaScript/RefreshPostureCookie/index.mjs'
-
-# Work
-alias bb=brazil-build
-alias js='cd ~/Development/JavaScript && ls'
-alias ops='cd ~/Development/workplace/PVLRCOperations/src/PVLRCOperationsView && ls'
-
-export PATH=$PATH:/usr/local/opt/curl/bin
-export PATH=$PATH:./node_modules/.bin
-export PATH=$PATH:$HOME/.dot-ix/bin
-export PATH=$PATH:$HOME/Notes/notes/scripts
-export PATH=$PATH:$HOME/.yarn/bin
-[[ -d "$HOME/.cargo/bin" ]] && export PATH=$PATH:$HOME/.cargo/bin
-export PATH=$PATH:$HOME/.toolbox/bin
-
-# Amazon Java Setup
-export JAVA_TOOLS_OPTIONS="-Dlog4j2.formatMsgNoLookups=true"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-# bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-eval "$(rbenv init -)"
-eval "$(/Users/serbypau/.local/bin/mise activate zsh)"
-source ~/.local/share/mise/completions.zsh
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)" code --locate-shell-integration-path zsh
-
-# Amazon Q post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
+(( ${+functions[_zsh_profile_mark]} )) && _zsh_profile_mark zshrc:end

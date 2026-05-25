@@ -1,15 +1,20 @@
-echo Installing NVM
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+#!/bin/sh
+# Cross-platform tool installs (Darwin + Linux).
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+echo Installing mise
+# mise is a polyglot tool-version manager. Replaces nvm for Node, pyenv for
+# Python, etc. The installer drops mise into ~/.local/bin and shims into
+# ~/.local/share/mise/shims (which .zshenv adds to PATH).
+curl -fsSL https://mise.run | sh
 
-echo Install nodejs
-nvm install --lts
+# Make mise available for the rest of this script.
+export PATH="$HOME/.local/bin:$PATH"
+
+echo Installing Node.js LTS via mise
+mise use --global node@lts
 
 echo Installing Bun
 curl -fsSL https://bun.sh/install | bash
 
 echo Installing Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
