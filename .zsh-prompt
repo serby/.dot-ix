@@ -1,10 +1,28 @@
 # Based on skwp
 
+# Midway cookie expiry, refreshed at most once per minute.
+# Sets _prompt_serby_midway to "MW-Exp HH:MM" (or empty if expired/missing).
+function prompt_serby_midway_refresh {
+  local cookie="$HOME/.midway/cookie"
+  [[ -r "$cookie" ]] || { _prompt_serby_midway=""; return }
+  local now=$(date +%s)
+  (( now - ${_prompt_serby_midway_checked:-0} < 60 )) && return
+  _prompt_serby_midway_checked=$now
+  local exp
+  exp=$(awk -F'\t' '$1=="#HttpOnly_midway-auth.amazon.com" && $6=="session" {print $5; exit}' "$cookie")
+  if [[ -z "$exp" || "$exp" -le "$now" ]]; then
+    _prompt_serby_midway=""
+  else
+    _prompt_serby_midway="MW-Exp $(date -r "$exp" +%H:%M)"
+  fi
+}
+
 function prompt_serby_precmd {
   # Get Git repository information.
   if (( $+functions[git-info] )); then
     git-info
   fi
+  prompt_serby_midway_refresh
 }
 
 function prompt_serby_setup {
@@ -46,11 +64,14 @@ function prompt_serby_setup {
   zstyle ':prezto:module:git:info:untracked' format "${_prompt_serby_colors[3]}u%f"
   zstyle ':prezto:module:git:info:keys' format 'prompt' '%b %d%a%m%u '
 
+  # Bright yellow for the midway expiry chip.
+  local _mw='${_prompt_serby_midway:+%B%F{226}${_prompt_serby_midway}%f%b }'
+
   # Define prompts.
   if [ "$(uname -s)" = "Darwin" ]; then
-    PROMPT="${_prompt_serby_colors[5]}%2d%f "'${git_info:+${(e)git_info[prompt]}}'""
+    PROMPT="${_prompt_serby_colors[5]}%2d%f ${_mw}"'${git_info:+${(e)git_info[prompt]}}'""
   else
-    PROMPT="${_prompt_serby_colors[3]}%n%f@${_prompt_serby_colors[2]}%m%f ${_prompt_serby_colors[5]}%2d%f "'${git_info:+${(e)git_info[prompt]}}'""
+    PROMPT="${_prompt_serby_colors[3]}%n%f@${_prompt_serby_colors[2]}%m%f ${_prompt_serby_colors[5]}%2d%f ${_mw}"'${git_info:+${(e)git_info[prompt]}}'""
   fi
 }
 
