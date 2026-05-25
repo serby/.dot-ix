@@ -5,6 +5,46 @@
 # Aliases, prompt, completions, and other interactive UX belong in ~/.zshrc.
 #
 
+#
+# Startup profiling. Set ZSH_PROFILE=1 in the environment before launching zsh
+# to get a per-file timing table at the end of .zlogin. Set ZSH_PROFILE=zprof
+# to also enable zsh's built-in function-level profiler (printed last).
+# Cost when unset: one parameter test per mark. Sub-microsecond.
+#
+if [[ -n "$ZSH_PROFILE" ]]; then
+  zmodload zsh/datetime
+  typeset -gA _zsh_profile_marks
+  _zsh_profile_marks[__start__]=$EPOCHREALTIME
+  _zsh_profile_order=()
+  _zsh_profile_mark() {
+    _zsh_profile_marks[$1]=$EPOCHREALTIME
+    _zsh_profile_order+=($1)
+  }
+  # Print a per-file timing table to stderr. Files report end-minus-start;
+  # gaps between files (zsh's own work loading the next file) are shown only
+  # when meaningful so the table stays scannable.
+  _zsh_profile_report() {
+    local file start end ms prev_end gap_ms
+    local total_start=${_zsh_profile_marks[__start__]}
+    print -u2 -- "zsh startup profile:"
+    prev_end=$total_start
+    for file in zshenv zprofile zshrc zlogin; do
+      start=${_zsh_profile_marks[${file}:start]}
+      end=${_zsh_profile_marks[${file}:end]}
+      [[ -z "$start" ]] && continue
+      gap_ms=$(( (start - prev_end) * 1000 ))
+      (( gap_ms > 1 )) && printf '  %-20s %7.2f ms\n' "(gap)" "$gap_ms" >&2
+      ms=$(( (end - start) * 1000 ))
+      printf '  %-20s %7.2f ms\n' "$file" "$ms" >&2
+      prev_end=$end
+    done
+    ms=$(( (EPOCHREALTIME - total_start) * 1000 ))
+    printf '  %-20s %7.2f ms\n' "total" "$ms" >&2
+  }
+  [[ "$ZSH_PROFILE" == zprof ]] && zmodload zsh/zprof
+  _zsh_profile_mark zshenv:start
+fi
+
 # Ensure path arrays do not contain duplicates.
 typeset -gU cdpath fpath mailpath path
 
@@ -94,3 +134,5 @@ TMPPREFIX="${TMPDIR%/}/zsh"
 if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile"
 fi
+
+(( ${+functions[_zsh_profile_mark]} )) && _zsh_profile_mark zshenv:end

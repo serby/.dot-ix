@@ -6,5 +6,9 @@
 # a login-shell hook.
 #
 
+(( ${+functions[_zsh_profile_mark]} )) && _zsh_profile_mark zprofile:start
+
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zprofile.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zprofile.post.zsh"
+
+(( ${+functions[_zsh_profile_mark]} )) && _zsh_profile_mark zprofile:end
